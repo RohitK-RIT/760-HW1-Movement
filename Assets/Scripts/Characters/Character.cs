@@ -39,50 +39,31 @@ namespace Characters
         {
             var direction = TargetPosition - (Vector2)transform.position;
             var distance = direction.magnitude;
+            direction = direction.normalized;
 
             if (distance <= stopRadius)
             {
-                _characterRigidbody.velocity = Vector2.zero;
-                return;
-            }
-
-            float targetSpeed = 0;
-            Vector2 targetVelocity = default;
-
-            if (distance > slowRadius)
-            {
-                targetSpeed = maxSpeed;
+                _currentVelocity = Vector2.zero;
             }
             else
             {
-                targetSpeed = maxSpeed * (distance / slowRadius);
+                var targetVelocity = direction // the direction in which the object should move
+                                     * (maxSpeed * Mathf.Clamp01(distance / slowRadius)); // the speed with which it show be moving
+                var acceleration = Vector2.ClampMagnitude((targetVelocity - _characterRigidbody.velocity) / timeToTarget, maxAcceleration);
+
+                _currentVelocity += acceleration * Time.deltaTime;
             }
 
-            targetVelocity = direction.normalized * targetSpeed;
-
-            var acceleration = targetVelocity - _characterRigidbody.velocity;
-            acceleration /= timeToTarget;
-
-            if (acceleration.magnitude > maxAcceleration)
-            {
-                acceleration = acceleration.normalized * maxAcceleration;
-            }
-
-            _currentVelocity = new Vector2(
-                _currentVelocity.x + acceleration.x * Time.deltaTime,
-                _currentVelocity.y + acceleration.y * Time.deltaTime);
-
-            FaceTarget(direction.normalized);
-
+            FaceTarget(direction);
             _characterRigidbody.velocity = _currentVelocity;
         }
 
-        private void FaceTarget(Vector2 velocity)
+        private void FaceTarget(Vector2 direction)
         {
-            if (velocity.magnitude <= 0)
+            if (direction.magnitude <= 0)
                 return;
 
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg));
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
         }
     }
 }
