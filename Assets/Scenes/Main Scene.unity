@@ -340,9 +340,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopRadius: 0
   slowRadius: 3
-  maxAcceleration: 10
-  maxSpeed: 5
-  timeToTarget: 0.1
+  maxAcceleration: 20
+  maxSpeed: 10
+  timeToTarget: 0.05
 --- !u!50 &595059441
 Rigidbody2D:
   serializedVersion: 4
@@ -640,9 +640,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopRadius: 0.65
   slowRadius: 3
-  maxAcceleration: 10
-  maxSpeed: 5
-  timeToTarget: 0.2
+  maxAcceleration: 20
+  maxSpeed: 10
+  timeToTarget: 0.1
   targetCharacter: {fileID: 595059440}
 --- !u!50 &1565131063
 Rigidbody2D:
